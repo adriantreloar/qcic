@@ -33,3 +33,4 @@ The checking loop sleeps for a variable amount of time - a long time if no activ
 The incoming message loops block until a message is received. If a received message is urgent it is handled immediately, otherwise it is placed on a queue of messages for the checking loop.
 
 If the checking loop finds a message has not been received in the expected time, it will perform an associated action - usually notifying someone via email.
+

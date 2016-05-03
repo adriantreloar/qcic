@@ -1,5 +1,9 @@
 # qcic
 Monitor remote processes in python with messages sent via 0MQ
+=============================================================
+
+Problem Statement
+-----------------
 
 The motivation for this project is to ensure the guys who I work with at MetaPraxis are not constantly trying to monitor processes from MetaPraxis' multiple clients.
 Now we are not scheduling the jobs, so we can't simply use a scheduler.
@@ -14,15 +18,26 @@ So far so good, but who will watch the watchers? Creating pairs or even farms of
 
 What if the watcher was alive all along, and we've simply suffered a net split? Then notification messages will be sent twice. Support networks must be designed to handle this eventuality, along with the possibility that a cry for help is a false alarm.
 
+Technologies
+------------
 
 I've chosen the Python and 0MQ technologies because I have written projects with them before, and I'm sure I can knock up the basics pretty quickly.
 I've made the decision that the monitor never replies to the monitored program, because some of our clients will barely allow the simple outbound socket to be opened from their systems, with the very bare protocol I'm planning. They certainy will not accept inbound traffic.
 
+Licensing
+---------
+
 I've, made the project available as open-source and under a MPL v2 license because it is a useful thing I think a lot of people could join in with. If you ask people to join in you have to guarantee that their work won't be stolen and sold on - thus the MPL v2 license. At the same time, you can use all of the source files in a proprietary project without infecting your proprietary code with GPLness. 
 There is no way a GPL or LGPL project of this type would even get off the ground.
 
-Getting started. As soon as there is more to this project than this readme, I'll put some installation instructions in.
 
+Getting started. 
+---------------
+
+As soon as there is more to this project than this readme, I'll put some installation instructions in.
+
+Overall Design
+--------------
 
 The design is like so - The watcher loads up some expected events, and starts a loop for checking if events have happened, and multiple loops which wait for incoming messages in various forms.
 
@@ -32,9 +47,13 @@ The incoming message loops block until a message is received. If a received mess
 
 If the checking loop finds a message has not been received in the expected time, it will perform an associated action - usually notifying someone via email.
 
+How I set this up
+-----------------
+
 To setup originally I ran:
 
-virtualenv -p python3 qcic
-pip install cookiecutter
-cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+    virtualenv -p python3 qcic
+    pip install cookiecutter
+    cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+
 

@@ -5,7 +5,7 @@ Monitor remote processes in python with messages sent via 0MQ
 Problem Statement
 -----------------
 
-The motivation for this project is to ensure the guys who I work with at MetaPraxis are not constantly trying to monitor processes from MetaPraxis' multiple clients.
+The motivation for this project is to ensure the guys who I work with are not constantly trying to monitor processes happening on their multiple clients' (i.e. people/company clients') servers.
 Now we are not scheduling the jobs, so we can't simply use a scheduler.
 
 The plan for this project is to make a background process that is expecting to receive zeromq (http://zeromq.org) messages from other processes.
@@ -55,5 +55,7 @@ To setup originally I ran:
     virtualenv -p python3 qcic
     pip install cookiecutter
     cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+    pip install pytest-cov
+
 
 

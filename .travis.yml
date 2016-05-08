@@ -9,6 +9,6 @@ install:
     - "pip install coverage"
     - "pip install coveralls"
 script: 
-    - "py.test --cov=qcic --cov-report=term-missing"
+    - "coverage run --source=../qcic setup.py test"
 after_success:
     coveralls

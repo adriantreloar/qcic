@@ -3,15 +3,17 @@ Tests for `qcic` module.
 """
 import pytest
 from qcic import qcic
+from qcic.qcic import Scheduled_Item
+import time
 
-
-class TestQcic(object):
+class Test_qcic(object):
 
     @classmethod
     def setup_class(cls):
         pass
 
-    def test_something(self):
+    def test_general_qcic(self):
+
         pass
 
     @classmethod

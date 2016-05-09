@@ -39,6 +39,16 @@ As soon as there is more to this project than this readme, I'll put some install
 Overall Design
 --------------
 
+.. aafig::
+    :aspect: 60
+    :scale: 150
+    :proportional:
+    :textual:
+
+    +--------------+         +-----------+          +----------------------------------------------+
+    | Some Process +---zmq-->+ qcic      +--email-->+ poor fool being woken up at 2 in the morning |
+    +--------------+         +-----------+          +----------------------------------------------+
+
 The design is like so - The watcher loads up some expected events, and starts a loop for checking if events have happened, and multiple loops which wait for incoming messages in various forms.
 
 The checking loop sleeps for a variable amount of time - a long time if no activity is expected, a short time if lots of activity is expected.
@@ -55,7 +65,11 @@ To setup originally I ran:
     virtualenv -p python3 qcic
     pip install cookiecutter
     cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+
+
     pip install pytest-cov
+    pip-install pyzmq
+    easy_install -U sphinxcontrib-aafig
 
 
 

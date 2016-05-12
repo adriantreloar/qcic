@@ -1,5 +1,7 @@
 from time import time, sleep
 from threading import Thread
+from queue import Queue, Empty as EmptyException
+
 
 import zmq
 
@@ -23,12 +25,18 @@ class Qcic_Monitor:
     """
 
     """    
-    def __init__(self,sleep_ms=60000):
+    def __init__(self,sleep_ms=60000,queue=None):
         
         self.sleep_ms=sleep_ms
 
         self.state='INITIALISED'
         self.started=False
+        
+        #Latest Message for testing 
+        self._latest_message_grabbed_from_queue=None
+
+        self.queue = queue
+        assert(self.queue)
 
     def start(self):
         self.state='STARTED'
@@ -42,8 +50,13 @@ class Qcic_Monitor:
     def _start_looping(self):
         
         while(self.started):
+            
+            while not self.queue.empty():
+                self._latest_message_grabbed_from_queue=self.queue.get(False,timeout=20)
+                #TODO - handle the message on the queue
+        
             sleep(self.sleep_ms/1000.0)
-
+            
     def stop(self):
         self.state='STOPPED'
         self.started=False
@@ -52,7 +65,7 @@ class Qcic_ZeroMQ_Receiver:
     """
 
     """    
-    def __init__(self,channels):
+    def __init__(self,channels,queue=None):
 
         self._main_thread_sender_url='tcp://127.0.0.1:5013'
         self._main_thread_sender_context=None
@@ -60,7 +73,13 @@ class Qcic_ZeroMQ_Receiver:
         
         self.started=False
         self.looping=False
-       
+        
+        #latest message sent, for easier testing
+        self._latest_message_sent_to_queue=None
+
+        self.queue = queue
+        assert(self.queue)
+
         self.state='INITIALISED'
         
 
@@ -124,9 +143,9 @@ class Qcic_ZeroMQ_Receiver:
         
         try:
             while(self.looping):
-                print('Awaiting message')
+                #print('Awaiting message')
                 signal=self._receiver.recv_multipart()
-                print('Got message',signal[0])
+                #print('Got message',signal[0])
                 
                 self.handle_message(signal)
 
@@ -136,7 +155,7 @@ class Qcic_ZeroMQ_Receiver:
             self.state='FAILED'
             self.started=False
             self.looping=False
-            print('Failed Thread')
+            #print('Failed Thread')
 
         finally:
             self._receiver.setsockopt(zmq.LINGER,1)
@@ -177,4 +196,19 @@ class Qcic_ZeroMQ_Receiver:
             self.state='STOPPING'
             self.started=False
             self.looping=False
-        
+
+        if msgtype==b'FAILED':
+            #Need to handle straight away - so write this code
+            assert(False)
+            self._latest_message_sent_to_queue=message
+            self.queue.put(message)
+
+        if msgtype==b'PROGRESS':
+            self._latest_message_sent_to_queue=message
+            self.queue.put(message)
+            
+        if msgtype==b'SUCCEEDED':
+            self._latest_message_sent_to_queue=message
+            self.queue.put(message)
+            
+            

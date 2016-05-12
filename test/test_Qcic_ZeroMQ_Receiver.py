@@ -9,6 +9,7 @@ from qcic import qcic
 from qcic.qcic import Qcic_ZeroMQ_Receiver
 import time
 import zmq
+from Queue import Queue
 
 class Test_Qcic_ZeroMQ_Receiver(object):
 
@@ -23,7 +24,9 @@ class Test_Qcic_ZeroMQ_Receiver(object):
 
     def test_can_initialise_a_qcic_Qcic_ZeroMQ_Receiver(self):
 
-        receiver=Qcic_ZeroMQ_Receiver(channels=[])
+        queue=Queue()
+
+        receiver=Qcic_ZeroMQ_Receiver(channels=[],queue=queue)
 
         #Default for production
         assert(receiver.state=='INITIALISED')
@@ -47,7 +50,8 @@ class Test_Qcic_ZeroMQ_Receiver_Loop(object):
 
         self.channels=[self._sender1_url]
 
-        self.receiver=Qcic_ZeroMQ_Receiver(channels=self.channels)
+        queue=Queue()
+        self.receiver=Qcic_ZeroMQ_Receiver(channels=self.channels,queue=queue)
 
         self._sender1.send_multipart([b'STARTED'])
             
@@ -140,8 +144,3 @@ class Test_Qcic_ZeroMQ_Receiver_Loop(object):
         assert(self.receiver.started==False)
         assert(self.receiver.looping==False)
             
-            
-            
-            
-        
-

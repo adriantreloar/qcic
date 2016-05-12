@@ -9,6 +9,8 @@ from qcic import qcic
 from qcic.qcic import Qcic_Monitor
 import time
 
+from Queue import Queue
+
 class Test_Qcic_Monitor(object):
 
     @classmethod
@@ -22,8 +24,10 @@ class Test_Qcic_Monitor(object):
 
     def test_can_initialise_a_qcic_monitor(self):
 
-        monitor=Qcic_Monitor()
+        queue=Queue()
 
+        monitor=Qcic_Monitor(queue=queue)
+        
         #Default for production
         assert(monitor.sleep_ms==60000)
         assert(monitor.state=='INITIALISED')
@@ -32,22 +36,27 @@ class Test_Qcic_Monitor(object):
 
     def test_can_initialise_with_sleep_ms(self):
         '''We'll need to be able to set sleep ms directly, or we'll not be able to test sensibly'''
-        monitor=Qcic_Monitor(sleep_ms=50)
+
+        queue=Queue()
+        monitor=Qcic_Monitor(sleep_ms=50,queue=queue)
 
         assert(monitor.sleep_ms==50)
 
 
     def test_can_set_sleep_ms(self):
         '''We'll need to be able to set sleep ms directly, or we'll not be able to test sensibly'''
-        monitor=Qcic_Monitor()
+        queue=Queue()
+        monitor=Qcic_Monitor(queue=queue)
 
         monitor.sleep_ms=5
         assert(monitor.sleep_ms==5)
 
+
 class Test_Qcic_Monitor_Loop(object):
 
     def setup_method(self,function=None):
-        self.monitor=Qcic_Monitor(sleep_ms=2)
+        queue=Queue()
+        self.monitor=Qcic_Monitor(sleep_ms=2,queue=queue)
 
     def teardown_method(self,function=None):
         '''Stop the monitor, otherwise it will loop forever'''
@@ -65,5 +74,4 @@ class Test_Qcic_Monitor_Loop(object):
         self.monitor.stop()
         assert(self.monitor.state=='STOPPED')
         assert(self.monitor.started==False)
-
 

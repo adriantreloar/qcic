@@ -9,7 +9,7 @@ from qcic import qcic
 from qcic.qcic import Qcic_ZeroMQ_Receiver
 import time
 import zmq
-from Queue import Queue
+from queue import Queue
 
 class Test_Qcic_ZeroMQ_Receiver(object):
 

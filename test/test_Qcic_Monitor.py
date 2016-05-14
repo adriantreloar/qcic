@@ -9,7 +9,7 @@ from qcic import qcic
 from qcic.qcic import Qcic_Monitor
 import time
 
-from Queue import Queue
+from queue import Queue
 
 class Test_Qcic_Monitor(object):
 

@@ -9,11 +9,7 @@ from qcic import qcic
 from qcic.qcic import Qcic_Monitor, Qcic_ZeroMQ_Receiver
 import time
 
-import sys
-if sys.version[0]=='2':
-    from queue import Queue
-else:
-    from Queue import Queue
+from queue import Queue
 
 
 
@@ -41,7 +37,7 @@ class Test_Qcic_Monitor(object):
     def test__received_queue_is_the_monitor_queue(self):
         assert(self.receiver.queue==self.monitor.queue)
 
-    def test_message_received_ends_up_on_monitor_queue(self):
+    def test_PROGRESS_message_received_ends_up_on_monitor_queue(self):
         
         message=[b'PROGRESS']
         #Send message directly
@@ -50,5 +46,12 @@ class Test_Qcic_Monitor(object):
         time.sleep(0.001)
         assert(self.monitor._latest_message_grabbed_from_queue==message)
 
-
+    def test_SUCCEEDED_message_received_ends_up_on_monitor_queue(self):
+        
+        message=[b'SUCCEEDED']
+        #Send message directly
+        self.receiver.handle_message(message)
+        assert(self.receiver._latest_message_sent_to_queue==message)
+        time.sleep(0.001)
+        assert(self.monitor._latest_message_grabbed_from_queue==message)
 

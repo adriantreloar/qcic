@@ -43,7 +43,7 @@ class Test_Qcic_Monitor(object):
         #Send message directly
         self.receiver.handle_message(message)
         assert(self.receiver._latest_message_sent_to_queue==message)
-        time.sleep(0.001)
+        time.sleep(0.002)
         assert(self.monitor._latest_message_grabbed_from_queue==message)
 
     def test_SUCCEEDED_message_received_ends_up_on_monitor_queue(self):
@@ -52,6 +52,6 @@ class Test_Qcic_Monitor(object):
         #Send message directly
         self.receiver.handle_message(message)
         assert(self.receiver._latest_message_sent_to_queue==message)
-        time.sleep(0.001)
+        time.sleep(0.002)
         assert(self.monitor._latest_message_grabbed_from_queue==message)
 

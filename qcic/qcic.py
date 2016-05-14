@@ -1,7 +1,11 @@
 from time import time, sleep
 from threading import Thread
-from queue import Queue, Empty as EmptyException
 
+import sys
+if sys.version[0]=='2':
+    from queue import Queue, Empty as EmptyException
+else:
+    from Queue import Queue, Empty as EmptyException
 
 import zmq
 
